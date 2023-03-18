@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,8 +13,8 @@ const BottomTab = createBottomTabNavigator();
 
 const ExpensesOverview = () => (
   <BottomTab.Navigator>
-    <Screen name="RecentExpenses" component={RecentExpenses} />
-    <Screen name="AllExpenses" component={AllExpenses} />
+    <BottomTab.Screen name="RecentExpenses" component={RecentExpenses} />
+    <BottomTab.Screen name="AllExpenses" component={AllExpenses} />
   </BottomTab.Navigator>
 );
 
@@ -31,4 +32,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create();
+const styles = StyleSheet.create({});

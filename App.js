@@ -9,7 +9,7 @@ import AllExpenses from "./screens/AllExpenses";
 import RecentExpenses from "./screens/RecentExpenses";
 import ManageExpense from "./screens/ManageExpense";
 
-import { GlobalStyles } from "./constants/styles";
+import { COLORS } from "./constants/styles";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -17,10 +17,10 @@ const BottomTab = createBottomTabNavigator();
 const ExpensesOverview = () => (
   <BottomTab.Navigator
     screenOptions={{
-      headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+      headerStyle: { backgroundColor: COLORS.primary500 },
       headerTintColor: "white",
-      tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-      tabBarActiveTintColor: GlobalStyles.colors.accent500,
+      tabBarStyle: { backgroundColor: COLORS.primary500 },
+      tabBarActiveTintColor: COLORS.accent500,
     }}
   >
     <BottomTab.Screen

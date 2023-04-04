@@ -17,15 +17,20 @@ const BottomTab = createBottomTabNavigator();
 
 const ExpensesOverview = () => (
   <BottomTab.Navigator
-    screenOptions={{
+    screenOptions={({ navigation }) => ({
       headerStyle: { backgroundColor: COLORS.primary500 },
       headerTintColor: "white",
       tabBarStyle: { backgroundColor: COLORS.primary500 },
       tabBarActiveTintColor: COLORS.accent500,
       headerRight: ({ tintColor }) => (
-        <IconButton icon="add" size={24} color={tintColor} onPress={() => {}} />
+        <IconButton
+          icon="add"
+          size={24}
+          color={tintColor}
+          onPress={() => navigation.navigate("ManageExpenses")}
+        />
       ),
-    }}
+    })}
   >
     <BottomTab.Screen
       name="RecentExpenses"
@@ -57,13 +62,22 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: COLORS.primary500 },
+            headerTintColor: "white",
+          }}
+        >
           <Stack.Screen
             name="ExpensesOverview"
             component={ExpensesOverview}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="ManageExpenses" component={ManageExpense} />
+          <Stack.Screen
+            name="ManageExpenses"
+            component={ManageExpense}
+            options={{ presentation: "modal" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

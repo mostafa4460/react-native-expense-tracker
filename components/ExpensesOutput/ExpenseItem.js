@@ -3,14 +3,17 @@ import { COLORS } from "../../constants/styles";
 import { getFormattedDate } from "../../utils/date";
 import { useNavigation } from "@react-navigation/native";
 
-const ExpenseItem = ({ description, date, amount }) => {
+const ExpenseItem = ({ id, description, date, amount }) => {
   const navigation = useNavigation();
 
-
-  const expensePressHandler = () => navigation.navigate("ManageExpenses");
+  const expensePressHandler = () =>
+    navigation.navigate("ManageExpenses", { expenseId: id });
 
   return (
-    <Pressable onPress={expensePressHandler} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable
+      onPress={expensePressHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
       <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>

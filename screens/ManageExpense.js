@@ -1,18 +1,41 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { COLORS } from "../constants/styles";
 import Button from "../components/UI/Button";
+import { ExpensesContext } from "../store/expenses-context";
 
 const ManageExpense = ({ route, navigation }) => {
+  const { deleteExpense, addExpense, updateExpense } =
+    useContext(ExpensesContext);
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
-  const deleteExpenseHandler = () => {};
+  const deleteExpenseHandler = () => {
+    deleteExpense(editedExpenseId);
+    navigation.goBack();
+  };
 
-  const cancelHandler = () => {};
+  const cancelHandler = () => {
+    navigation.goBack();
+  };
 
-  const confirmHandler = () => {};
+  const confirmHandler = () => {
+    if (isEditing) {
+      updateExpense(editedExpenseId, {
+        description: "Test",
+        amount: 19.99,
+        date: new Date(),
+      });
+    } else {
+      addExpense({
+        description: "Test",
+        amount: 19.99,
+        date: new Date(),
+      });
+    }
+    navigation.goBack();
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({

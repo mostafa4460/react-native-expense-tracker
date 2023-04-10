@@ -2,7 +2,7 @@ import { StyleSheet, TextInput } from "react-native";
 import { Text, View } from "react-native";
 import { COLORS } from "../../constants/styles";
 
-const Input = ({ label, textInputProps }) => {
+const Input = ({ label, textInputProps, style }) => {
   const inputStyles = [styles.input];
 
   if (textInputProps?.multiline) {
@@ -10,7 +10,7 @@ const Input = ({ label, textInputProps }) => {
   }
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, style]}>
       <Text style={styles.label}>{label}</Text>
       <TextInput style={inputStyles} {...textInputProps} />
     </View>

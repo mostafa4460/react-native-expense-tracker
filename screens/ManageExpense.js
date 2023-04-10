@@ -4,6 +4,7 @@ import IconButton from "../components/UI/IconButton";
 import { COLORS } from "../constants/styles";
 import Button from "../components/UI/Button";
 import { ExpensesContext } from "../store/expenses-context";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 const ManageExpense = ({ route, navigation }) => {
   const { deleteExpense, addExpense, updateExpense } =
@@ -45,6 +46,8 @@ const ManageExpense = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <ExpenseForm />
+
       <View style={styles.buttonsContainer}>
         <Button mode="flat" onPress={cancelHandler} style={styles.button}>
           Cancel
@@ -80,6 +83,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 12,
   },
   button: {
     minWidth: 120,

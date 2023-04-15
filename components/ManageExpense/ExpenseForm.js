@@ -1,12 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import Input from "./Input";
 import { useState } from "react";
+import Button from "../UI/Button";
+import { getFormattedDate } from "../../utils/date";
 
-const ExpenseForm = () => {
+const ExpenseForm = ({
+  onCancel,
+  onSubmit,
+  submitButtonLabel,
+  defaultValues,
+}) => {
   const [form, setForm] = useState({
-    amount: "",
-    date: "",
-    description: "",
+    amount: defaultValues?.amount.toString() || "",
+    date: defaultValues ? getFormattedDate(defaultValues.date) : "",
+    description: defaultValues?.description || "",
   });
 
   const formChangeHandler = (name, value) => {
@@ -14,6 +21,15 @@ const ExpenseForm = () => {
       ...prevForm,
       [name]: value,
     }));
+  };
+
+  const submitHandler = () => {
+    const expenseData = {
+      amount: +form.amount,
+      date: new Date(form.date),
+      description: form.description,
+    };
+    onSubmit(expenseData);
   };
 
   return (
@@ -34,7 +50,7 @@ const ExpenseForm = () => {
           style={styles.rowInput}
           label="Date"
           textInputProps={{
-            placeholder: "MM-DD-YYYY",
+            placeholder: "YYYY-MM-DD",
             maxLength: 10,
             onChangeText: formChangeHandler.bind(this, "date"),
             value: form.date,
@@ -50,6 +66,15 @@ const ExpenseForm = () => {
           value: form.description,
         }}
       />
+
+      <View style={styles.buttonsContainer}>
+        <Button mode="flat" onPress={onCancel} style={styles.button}>
+          Cancel
+        </Button>
+        <Button onPress={submitHandler} style={styles.button}>
+          {submitButtonLabel}
+        </Button>
+      </View>
     </View>
   );
 };
@@ -73,5 +98,15 @@ const styles = StyleSheet.create({
   },
   rowInput: {
     flex: 1,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  button: {
+    minWidth: 120,
+    marginHorizontal: 8,
   },
 });

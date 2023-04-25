@@ -3,7 +3,11 @@ import { StyleSheet, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { COLORS } from "../constants/styles";
 import { ExpensesContext } from "../store/expenses-context";
-import { storeExpense } from "../utils/http";
+import {
+  storeExpense,
+  updateExpense as backendUpdateExpense,
+  deleteExpense as backendDeleteExpense,
+} from "../utils/http";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 const ManageExpense = ({ route, navigation }) => {
@@ -15,8 +19,9 @@ const ManageExpense = ({ route, navigation }) => {
     (expense) => expense.id === editedExpenseId
   );
 
-  const deleteExpenseHandler = () => {
+  const deleteExpenseHandler = async () => {
     deleteExpense(editedExpenseId);
+    await backendDeleteExpense(editedExpenseId);
     navigation.goBack();
   };
 
@@ -27,6 +32,7 @@ const ManageExpense = ({ route, navigation }) => {
   const confirmHandler = async (expenseData) => {
     if (isEditing) {
       updateExpense(editedExpenseId, expenseData);
+      await backendUpdateExpense(editedExpenseId, expenseData);
     } else {
       const id = await storeExpense(expenseData);
       addExpense({ ...expenseData, id });

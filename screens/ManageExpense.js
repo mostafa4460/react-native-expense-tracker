@@ -10,9 +10,11 @@ import {
 } from "../utils/http";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 const ManageExpense = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { deleteExpense, addExpense, updateExpense, expenses } =
     useContext(ExpensesContext);
   const editedExpenseId = route.params?.expenseId;
@@ -23,9 +25,14 @@ const ManageExpense = ({ route, navigation }) => {
 
   const deleteExpenseHandler = async () => {
     setIsLoading(true);
-    deleteExpense(editedExpenseId);
-    await backendDeleteExpense(editedExpenseId);
-    navigation.goBack();
+    try {
+      await backendDeleteExpense(editedExpenseId);
+      deleteExpense(editedExpenseId);
+      navigation.goBack();
+    } catch (err) {
+      setError("Could not delete this expense.");
+      setIsLoading(false);
+    }
   };
 
   const cancelHandler = () => {
@@ -34,14 +41,19 @@ const ManageExpense = ({ route, navigation }) => {
 
   const confirmHandler = async (expenseData) => {
     setIsLoading(true);
-    if (isEditing) {
-      updateExpense(editedExpenseId, expenseData);
-      await backendUpdateExpense(editedExpenseId, expenseData);
-    } else {
-      const id = await storeExpense(expenseData);
-      addExpense({ ...expenseData, id });
+    try {
+      if (isEditing) {
+        updateExpense(editedExpenseId, expenseData);
+        await backendUpdateExpense(editedExpenseId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        addExpense({ ...expenseData, id });
+      }
+      navigation.goBack();
+    } catch (err) {
+      setError("Could not add or update this expense.");
+      setIsLoading(false);
     }
-    navigation.goBack();
   };
 
   useLayoutEffect(() => {
@@ -50,9 +62,15 @@ const ManageExpense = ({ route, navigation }) => {
     });
   }, [navigation, editedExpenseId]);
 
-  return isLoading ? (
-    <LoadingOverlay />
-  ) : (
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} />;
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
+
+  return (
     <View style={styles.container}>
       <ExpenseForm
         onCancel={cancelHandler}

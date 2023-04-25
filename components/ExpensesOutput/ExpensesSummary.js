@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   period: {
-    fontSize: 12,
+    fontSize: 16,
     color: COLORS.primary400,
   },
   sum: {

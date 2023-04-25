@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { COLORS } from "../constants/styles";
@@ -9,8 +9,10 @@ import {
   deleteExpense as backendDeleteExpense,
 } from "../utils/http";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 const ManageExpense = ({ route, navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { deleteExpense, addExpense, updateExpense, expenses } =
     useContext(ExpensesContext);
   const editedExpenseId = route.params?.expenseId;
@@ -20,6 +22,7 @@ const ManageExpense = ({ route, navigation }) => {
   );
 
   const deleteExpenseHandler = async () => {
+    setIsLoading(true);
     deleteExpense(editedExpenseId);
     await backendDeleteExpense(editedExpenseId);
     navigation.goBack();
@@ -30,6 +33,7 @@ const ManageExpense = ({ route, navigation }) => {
   };
 
   const confirmHandler = async (expenseData) => {
+    setIsLoading(true);
     if (isEditing) {
       updateExpense(editedExpenseId, expenseData);
       await backendUpdateExpense(editedExpenseId, expenseData);
@@ -46,7 +50,9 @@ const ManageExpense = ({ route, navigation }) => {
     });
   }, [navigation, editedExpenseId]);
 
-  return (
+  return isLoading ? (
+    <LoadingOverlay />
+  ) : (
     <View style={styles.container}>
       <ExpenseForm
         onCancel={cancelHandler}
